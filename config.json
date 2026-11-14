@@ -1,0 +1,37 @@
+{
+  "model_name": "PrimeECG",
+  "model_config": {
+    "binary_tasks": [
+      "mortality_28d"
+    ],
+    "conv_channels": [24, 48, 96, 128],
+    "lead_hidden": 96,
+    "lead_gru_layers": 1,
+    "lead_embedding_dim": 128,
+    "tabular_dim": 2,
+    "tabular_hidden": 32,
+    "dropout": 0.25,
+    "classifier_hidden": 256
+  },
+  "input": {
+    "lead_order": ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"],
+    "unit": "mV",
+    "sampling_rate_hz": 500,
+    "duration_seconds": 10,
+    "shape": [12, 5000],
+    "tabular_order": ["age_div_100", "male_indicator"]
+  },
+  "preprocessing": {
+    "resampling": "scipy.signal.resample",
+    "window": "10 seconds with the fewest gross artifacts, scanned in 0.25-second steps, ties toward the center",
+    "bandpass_hz": [0.5, 40.0],
+    "bandpass_filter": "4th-order Butterworth SOS, zero-phase sosfiltfilt",
+    "moving_average_points": 5,
+    "normalized": false
+  },
+  "quality_control": {
+    "max_absolute_amplitude_mv": 5.0,
+    "min_lead_peak_to_peak_mv": 0.05
+  }
+}
+
